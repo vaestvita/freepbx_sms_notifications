@@ -10,7 +10,7 @@ $steptime = 15;				// РІСЂРµРјСЏ РІ РґРЅСЏС… РґР»СЏ РєР°СЂС‚РѕС‡РєРё
 $stepnotify = 2;			// РІСЂРµРјСЏ РІ С‡Р°СЃР°С… РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёСЏ РѕРїРµСЂР°С‚РѕСЂР°
 $filecard = '/var/lib/asterisk/bin/messages.txt'; // РїСѓС‚СЊ РґРѕ С„Р°Р»Р° СЃ СЃРѕРѕР±С‰РµРЅРёСЏРјРё РІРёР·РёС‚РєР°РјРё
 $filenotify = '/var/lib/asterisk/bin/messages1.txt'; // РїСѓС‚СЊ РґРѕ С„Р°Р»Р° СЃ СЃРѕРѕР±С‰РµРЅРёСЏРјРё СѓРІРµРґРѕРјР»РµРЅРёСЏРјРё РѕРїРµСЂР°С‚РѕСЂСѓ
-$url = 'https://sms.separator.keenetic.pro/send.html'; //Р°РґСЂРµСЃ СЃРјСЃ РіРµР№С‚Р°
+$url = ' '; //Р°РґСЂРµСЃ СЃРјСЃ РіРµР№С‚Р°
 $log = '/var/log/sms.log';		// Р»РѕРі С„Р°Р№Р»
 
 
@@ -161,12 +161,12 @@ function mysqlconnect($host, $user, $password, $database) {
 	if ($mysqli->connect_error) {
 		die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 	} else {
-//		printf("Соединение с базой %s установлено\n", $database);
+//		printf("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ %s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", $database);
 	}
 	if (!$mysqli->set_charset("utf8")) {
-//		printf("Ошибка при загрузке набора символов utf8: %s\n", $mysqli->error);
+//		printf("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ utf8: %s\n", $mysqli->error);
 	} else {
-//		printf("Текущий набор символов: %s\n", $mysqli->character_set_name());
+//		printf("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s\n", $mysqli->character_set_name());
 	}
 	return $mysqli;
 }
@@ -174,16 +174,16 @@ function mysqlconnect($host, $user, $password, $database) {
 function mysqlquery($mysqli, $query) {
 	$results = $mysqli->query($query);
 	if($results) {
-//		print "Выполнение запроса прошло успешно\n";
+//		print "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";
 	} else {
-//		print "Запрос не выполнен\n";
+//		print "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";
 	}
 	return $results;
 }
 
 function mysqlclose($mysqli) {
 	mysqli_close($mysqli);
-//	print "Соединение закрыто\n";
+//	print "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n";
 }
 
 
