@@ -1,5 +1,5 @@
 # FreePBX SMS message sender
-Small php-file send your message from FreePBX to your Android SMS Gateway (eg MacroDroid, webhook trigger)
+Send your SMS-message from FreePBX to your Android SMS Gateway (eg. MacroDroid, webhook trigger)
 
 Capabilities:
 1. Sending an SMS business card to your clients after a call
