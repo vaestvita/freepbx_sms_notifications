@@ -2,30 +2,30 @@
 
 require_once('nokogiri.php');
 
-$hostmysql = '';	// адрес базы
-$database = 'asteriskcdrdb';		// имя базы
-$usermysql = 'sms';		// пользователь базы
-$passmysql = '***';		// пароль
-$steptime = 15;				// время в днях для карточки
-$stepnotify = 2;			// время в часах для уведомления оператора
-$filecard = '/var/lib/asterisk/bin/messages.txt'; // путь до фала с сообщениями визитками
-$filenotify = '/var/lib/asterisk/bin/messages1.txt'; // путь до фала с сообщениями уведомлениями оператору
-$url = ' '; //адрес смс гейта
-$log = '/var/log/sms.log';		// лог файл
+$hostmysql = '127.0.0.1';	// database address
+$database = 'asteriskcdrdb';		// database name
+$usermysql = 'user';		// database user
+$passmysql = 'password';		// password database user
+$steptime = 30;				// time in days for the card
+$stepnotify = 1;			// time in hours for operator notification
+$filecard = '/var/lib/asterisk/bin/sms/card.txt'; // path to the file with business cards
+$filenotify = '/var/lib/asterisk/bin/sms/operator.txt'; // path to the file with messages notifications to the operator
+$url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address
+$log = '/var/log/sms';		// logfile
 
 
-// получение данных из базы
-$curdate = time() + 120;				//получаем текущее время
-$stepdate = $curdate - $steptime*60*60*24;	//вычисляем сдвиг по времени
-$fcurdate = date("Y-m-d H:i:s", $curdate);	//форматируем текущее время
-$fstepdate = date("Y-m-d H:i:s", $stepdate);	//форматируем время со сдвигом
-$mysqli = mysqlconnect($hostmysql, $usermysql, $passmysql, $database); // подключаемся к базе
-$query = "SELECT dstchannel,disposition FROM cdr WHERE calldate >= '" . $fstepdate .  "' AND calldate <= '" . $fcurdate . "' AND src = " . $argv[1] . " AND dst = " . $argv[2] . ";"; // формируем запрос
+// retrieving data from the database
+$curdate = time() + 120;				//get the current time
+$stepdate = $curdate - $steptime*60*60*24;	//calculate the time shift
+$fcurdate = date("Y-m-d H:i:s", $curdate);	//formatting the current time
+$fstepdate = date("Y-m-d H:i:s", $stepdate);	//formatting time with a shift
+$mysqli = mysqlconnect($hostmysql, $usermysql, $passmysql, $database); // connect to the base
+$query = "SELECT dstchannel,disposition FROM cdr WHERE calldate >= '" . $fstepdate .  "' AND calldate <= '" . $fcurdate . "' AND src = " . $argv[1] . " AND dst = " . $argv[2] . ";"; // form a request
 echo $query . "\n";
-$results = mysqlquery($mysqli, $query);                 // выполняем запрос
-while($row = $results->fetch_array())   {               // анализируем ответ
-	$dialstatus = $row["disposition"];              // запоминаем последний dialstatus
-	$dstchannel = $row["dstchannel"];		// куда ушел вызов
+$results = mysqlquery($mysqli, $query);                 // execute the request
+while($row = $results->fetch_array())   {               // analyzing the answer
+	$dialstatus = $row["disposition"];              // remember the last dialstatus
+	$dstchannel = $row["dstchannel"];		// where did the call go
 }
 if(!$dstchannel){
 	$query = "SELECT dstchannel,disposition FROM cdr WHERE calldate >= '" . $fstepdate .  "' AND calldate <= '" . $fcurdate . "' AND cnam = " . $argv[1] . " AND dst = " . $argv[2] . ";"; 
@@ -36,39 +36,39 @@ if(!$dstchannel){
 		$dstchannel = $row["dstchannel"];
 	}
 }
-mysqlclose($mysqli);					// закрываем соединение
-preg_match('~\/(.*?)@~', $dstchannel, $dstchannel);	// выделяем номер направления вызова
+mysqlclose($mysqli);					// close the connection
+preg_match('~\/(.*?)@~', $dstchannel, $dstchannel);	// select the call direction number
 echo $dialstatus . "\t" . $dstchannel[1] . "\n";
 
-//первая цепочка - отправка смс-визитки позвонившему
-if(preg_match('/^79[0-9]{9}/',$argv[1]))	{	//проверяем что номер мобильный
+//first chain - sending an SMS business card to the caller
+if(preg_match('/^79[0-9]{9}/',$argv[1]))	{	//check that the number is mobile
 	$row = 1;
 	$srcnum = 0;
-	if (($handle = fopen($log, "r")) !== FALSE) { 	// получаем указатель на файл с логом
-		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// построчто читаем фал лога
+	if (($handle = fopen($log, "r")) !== FALSE) { 	// get a pointer to a file with a log
+		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// read the log file line by line
 //			echo $data[2] . "-" . $argv[1] . "\t" . $data [1] . "-" . $stepdate . "\t" . $data[4] . "\n";
-			if (($data[2] == $argv[1]) &&			//если номер есть в логе
-			($data[1] >= $stepdate) &&			// и смс была отправлена позже времени со сдивигом
-			($data[4] == "card") &&				// была отправлена визитка
-			($data[5] == "The SMS has been sent!")) { 	// и отправка была успешной
-				echo "СМС была отправлена\n";
+			if (($data[2] == $argv[1]) &&			//if the number is in the log
+			($data[1] >= $stepdate) &&			// and the SMS was sent later with a split time
+			($data[4] == "card") &&				// a business card was sent
+			($data[5] == "")) { 	// and the dispatch was successful
+				echo "SMS has been sent\n";
 				$srcnum=0;
-				break;					// то заканичваем чтение лога
-			} else {					// если номер не встретился в логе
-//				echo "СМС не отправлялась";
-				$srcnum = $argv[1];			// то запоминаем его
+				break;					// then we finish reading the log
+			} else {					// if the number is not found in the log
+//				echo "SMS was not sent";
+				$srcnum = $argv[1];			// then we remember it
 			}	
 			$row++;
 		}
 	}
-	if($srcnum) {							// если смс надо отправить
-		$lines = file($filecard);		//читаем файл с сообщеиями "Спасибо за звонок"
-		foreach ($lines as $line_num => $line) {//читаем построчно
-			$num = substr($line,0,strpos($line,';'));	//выделем внутренний номер
-			$str = substr($line,strpos($line,';')+1);	//выделяем тескт сообщения
-			$ustr = urlencode($str);			// перобразуем с код
-			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// исправляем переводы строки
-			if($num == $argv[2]) {		//если внутренни номер найден
+	if($srcnum) {							// if you need to send an SMS
+		$lines = file($filecard);		//read the file with the messages "Thank you for the call"
+		foreach ($lines as $line_num => $line) {//we read line by line
+			$num = substr($line,0,strpos($line,';'));	//select an internal number
+			$str = substr($line,strpos($line,';')+1);	//highlight message text
+			$ustr = urlencode($str);			// convert to code
+			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// fix line breaks
+			if($num == $argv[2]) {		//if extension number found
 				$surl = $url . "?smsto=%2B" . $srcnum . "&smsbody=" . $ustr . "&smstype=sms";
 				echo $surl . "\n";
 				$ch = curl_init();
@@ -98,36 +98,36 @@ else	{
 	echo "not mobile";
 }
 
-//вторая цепочка - отправка уведомления оператору
+//the second chain - sending a notification to the operator
 if ($dialstatus != "ANSWERED"){
-	$stepdate = $curdate - $stepnotify*60*60;	//вычисляем сдвиг по времени
+	$stepdate = $curdate - $stepnotify*60*60;	//calculate time shift
 	$row = 1;
 	$srcnum = 0;
-	if (($handle = fopen($log, "r")) !== FALSE) { 	// получаем указатель на файл с логом
-		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// построчто читаем фал лога
+	if (($handle = fopen($log, "r")) !== FALSE) { 	// get a pointer to a file with a log
+		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// read the log file line by line
 //			echo $data[2] . "-" . $argv[1] . "\t" . $data [1] . "-" . $stepdate . "\t" . $data[4] . "\n";
-			if (($data[2] == $argv[1]) &&			//если номер есть в логе
-			($data[1] >= $stepdate) &&			// и смс была отправлена позже времени со сдивигом
-			($data[4] == "notify") &&				// была отправлена визитка
-			($data[5] == "The SMS has been sent!")) { 	// и отправка была успешной
-				echo "СМС была отправлена\n";
+			if (($data[2] == $argv[1]) &&			//if the number is in the log
+			($data[1] >= $stepdate) &&			// and the SMS was sent later with a shift
+			($data[4] == "notify") &&				// a business card was sent
+			($data[5] == "")) { 	// and the dispatch was successful
+				echo "SMS has been sent\n";
 				$srcnum=0;
-				break;					// то заканичваем чтение лога
-			} else {					// если номер не встретился в логе
-//				echo "СМС не отправлялась";
-				$srcnum = $argv[1];			// то запоминаем его
+				break;					// then the log reading ends
+			} else {					// if the number is not found in the log
+//				echo "SMS not sent";
+				$srcnum = $argv[1];			// then we remember it
 			}	
 			$row++;
 		}
 	}
-	if($srcnum) {							// если смс надо отправить
-		$lines = file($filenotify);		//читаем файл с сообщеиями оператору
-		foreach ($lines as $line_num => $line) {//читаем построчно
-			$num = substr($line,0,strpos($line,';'));	//выделем внутренний номер
-			$str = substr($line,strpos($line,';')+1);	//выделяем тескт сообщения
-			$ustr = urlencode($str);			// перобразуем с код
-			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// исправляем переводы строки
-			if($num == $argv[2]) {		//если внутренни номер найден
+	if($srcnum) {							// if you need to send an SMS
+		$lines = file($filenotify);		//read the file with messages to the operator
+		foreach ($lines as $line_num => $line) {//we read line by line
+			$num = substr($line,0,strpos($line,';'));	//select an internal number
+			$str = substr($line,strpos($line,';')+1);	//highlight message text
+			$ustr = urlencode($str);			// convert to code
+			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// fix line breaks
+			if($num == $argv[2]) {		//if extension number found
 				$surl = $url . "?smsto=%2B" . $dstchannel[1] . "&smsbody=" . $ustr . "%20%2B" . $argv[1] . "&smstype=sms";
 				echo $surl . "\n";
 				$ch = curl_init();
@@ -161,12 +161,12 @@ function mysqlconnect($host, $user, $password, $database) {
 	if ($mysqli->connect_error) {
 		die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 	} else {
-//		printf("���������� � ����� %s �����������\n", $database);
+//		printf("Database %s connected\n", $database);
 	}
 	if (!$mysqli->set_charset("utf8")) {
-//		printf("������ ��� �������� ������ �������� utf8: %s\n", $mysqli->error);
+//		printf("Error loading character set utf8: %s\n", $mysqli->error);
 	} else {
-//		printf("������� ����� ��������: %s\n", $mysqli->character_set_name());
+//		printf("Current character set: %s\n", $mysqli->character_set_name());
 	}
 	return $mysqli;
 }
@@ -174,16 +174,16 @@ function mysqlconnect($host, $user, $password, $database) {
 function mysqlquery($mysqli, $query) {
 	$results = $mysqli->query($query);
 	if($results) {
-//		print "���������� ������� ������ �������\n";
+//		print "The request was successful\n";
 	} else {
-//		print "������ �� ��������\n";
+//		print "Request failed\n";
 	}
 	return $results;
 }
 
 function mysqlclose($mysqli) {
 	mysqli_close($mysqli);
-//	print "���������� �������\n";
+//	print "Connection closed\n";
 }
 
 
