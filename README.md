@@ -7,13 +7,14 @@ Capabilities:
 
 Installation and configuration
 
-copy files to folder /var/lib/asterisk/bin/sms/
-go to /var/lib/asterisk/bin/
-chown asterisk:asterisk -R /sms
+1. copy files to folder /var/lib/asterisk/bin/sms/
+2. go to /var/lib/asterisk/bin/
+3. chown asterisk:asterisk -R /sms
+4. edit the file sms.php to connect to your database
 
-Go to https://my-pbx-server.com/admin/config.php?display=advancedsettings  (FreePBX Advanced Settings)
-copy this code "/usr/bin/php /var/lib/asterisk/bin/sms/sms.php ^{CALLERID(name)} ^{ARG3}"  to the field  "Post Call Recording Script"
-Submit, Apply Config
+5. Go to https://my-pbx-server.com/admin/config.php?display=advancedsettings  (FreePBX Advanced Settings)
+6. copy this code "/usr/bin/php /var/lib/asterisk/bin/sms/sms.php ^{CALLERID(name)} ^{ARG3}"  to the field  "Post Call Recording Script"
+7. Submit, Apply Config
 
 
 install the app MacroDroid (https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) on your phone 
