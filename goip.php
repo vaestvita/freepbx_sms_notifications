@@ -10,7 +10,7 @@ $steptime = 30;				// время в днях для карточки
 $stepnotify = 1;			// время в часах для уведомления оператора
 $filecard = '/var/lib/asterisk/bin/sms/card.txt'; // путь до фала с сообщениями визитками
 $filenotify = '/var/lib/asterisk/bin/sms/operator.txt'; // путь до фала с сообщениями уведомлениями оператору
-$url = 'http://127.0.0.1/goip/en/dosend.php?USERNAME=smsuser&PASSWORD=smsuser&smsprovider=1&method=2'; //адрес смс гейта
+$url = 'http://127.0.0.1/goip/en/dosend.php?USERNAME=USER&PASSWORD=PASS&smsprovider=1&method=2'; //адрес смс гейта
 $log = '/var/log/asterisk/sms';		// лог файл
 
 
