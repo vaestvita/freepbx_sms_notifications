@@ -1,4 +1,6 @@
 # FreePBX SMS notification sender
+
+https://github.com/vaestvita/freepbx_sms_notifications
 Sending SMS notifications from your FreePBX server via SMS gateway (Goip SMS server, MacroDroid (Android))
 
 Capabilities:
