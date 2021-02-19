@@ -35,7 +35,7 @@ install the app MacroDroid (https://play.google.com/store/apps/details?id=com.ar
 create a macro 
 
 1. use a webhook as a trigger (copy the received address to a file sms.php, $url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address)
-2. Create a local variables (smsbody, smsto, smstype)
+2. Create a local variables (memo, smsnum)
 3. create actions "Messaging - Send SMS" 
 4. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
 5. in the field "Message text" insert local variable "Memo" ([v=memo])
