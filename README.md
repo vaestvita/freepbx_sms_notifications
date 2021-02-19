@@ -8,8 +8,8 @@ Capabilities:
 
 Installation and configuration
 
-1. copy files to folder /var/lib/asterisk/bin/sms/
-2. go to /var/lib/asterisk/bin/
+1. copy files to folder /var/lib/asterisk/agi-bin/sms
+2. go to /var/lib/asterisk/agi-bin/
 3. chown asterisk:asterisk -R /sms
 4. add code to the end of the file extensions_custom.conf 
 
@@ -25,7 +25,7 @@ exten => s,n,MacroExit
 
 [send_sms]
 exten => s,1,Noop(Entering user defined context send_sms in extensions_custom.conf)
-exten => s,n,System(/usr/bin/php -f /var/lib/asterisk/bin/sms/goip.php ${CONNECTEDLINE(num)} ${CALLERID(num)} ${DIALSTATUS} ${CDR(dstchannel)})
+exten => s,n,AGI(sms/sms.php,${CONNECTEDLINE(num)},${DIALSTATUS},${CDR(dstchannel)})
 exten => s,n,Return
 
 5. Submit, Apply Config
