@@ -62,7 +62,7 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 				curl_setopt($ch, CURLOPT_HEADER, false);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-//				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				$result=0;
 				$result = curl_exec($ch);
 //				var_dump($result);
@@ -120,10 +120,9 @@ if ($dialstatus != "ANSWER"){
 				curl_setopt($ch, CURLOPT_HEADER, false);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-//				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				$result=0;
 				$result = curl_exec($ch);
-//				var_dump($result);
 				if($result) {
 					$html = new nokogiri($result);
 					$answer = $html->get('td[colspan="3"]')->toArray();
@@ -156,7 +155,7 @@ if ($dialstatus == "ANSWER"){
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-//			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			$result=0;
 			$result = curl_exec($ch);
 			break;
