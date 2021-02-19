@@ -13,9 +13,9 @@ $ext = $agi->request['agi_arg_1']; //${CONNECTEDLINE(num)} - Gets Connected Line
 
 $steptime = 30;				// frequency of SMS business cards in days
 $stepnotify = 10;			// time in minutes to notify the operator of a missed call
-$filecard = '/var/lib/asterisk/bin/sms/card.txt'; // path to the file with SMS business cards 
-$filenotify = '/var/lib/asterisk/bin/sms/notify.txt'; // path to the file with messages notifications to the operator
-$fileanswered = '/var/lib/asterisk/bin/sms/answered.txt'; // path to file with sms received call
+$filecard = '/var/lib/asterisk/agi-bin/sms/card.txt'; // path to the file with SMS business cards 
+$filenotify = '/var/lib/asterisk/agi-bin/sms/notify.txt'; // path to the file with messages notifications to the operator
+$fileanswered = '/var/lib/asterisk/agi-bin/sms/answered.txt'; // path to file with sms received call
 $url = 'https://myserver/goip/en/dosend.php?USERNAME=smsuser&PASSWORD=password&smsprovider=1&method=2'; //sms gate url
 $log = '/var/log/asterisk/sms';		// log
 
