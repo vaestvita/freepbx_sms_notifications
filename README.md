@@ -13,26 +13,20 @@ Installation and configuration
 3. chown asterisk:asterisk -R /sms
 4. add code to the end of the file extensions_custom.conf 
 
-[macro-dial-ringall-predial-hook]
+[macro-dial-ringall-predial-hook]  
+exten => s,1,Noop(Entering user defined context macro-dial-ringall-predial-hook in extensions_custom.conf)  
+exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)  
+exten => s,n,MacroExit  
 
-exten => s,1,Noop(Entering user defined context macro-dial-ringall-predial-hook in extensions_custom.conf)
+[macro-dial-hunt-predial-hook]  
+exten => s,1,Noop(Entering user defined context macro-dial-hunt-predial-hook in extensions_custom.conf)  
+exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)  
+exten => s,n,MacroExit  
 
-exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)
-
-exten => s,n,MacroExit
-
-[macro-dial-hunt-predial-hook]
-exten => s,1,Noop(Entering user defined context macro-dial-hunt-predial-hook in extensions_custom.conf)/n
-exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)
-exten => s,n,MacroExit
-
-[send_sms]
-
-exten => s,1,Noop(Entering user defined context send_sms in extensions_custom.conf)
-
-exten => s,n,AGI(sms/sms.php,${CONNECTEDLINE(num)},${DIALSTATUS},${CDR(dstchannel)})
-
-exten => s,n,Return
+[send_sms]  
+exten => s,1,Noop(Entering user defined context send_sms in extensions_custom.conf)  
+exten => s,n,AGI(sms/sms.php,${CONNECTEDLINE(num)},${DIALSTATUS},${CDR(dstchannel)})  
+exten => s,n,Return  
 
 5. Submit, Apply Config
 
