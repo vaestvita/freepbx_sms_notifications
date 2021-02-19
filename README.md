@@ -1,5 +1,5 @@
 # FreePBX SMS notification sender
-Send your SMS-notification from FreePBX to your SMS Gateway (eg. MacroDroid, Goip SMS server)
+Sending SMS notifications from your FreePBX server via SMS gateway (Goip SMS server, MacroDroid (Android))
 
 Capabilities:
 1. Sending an SMS business card to your clients after a call
