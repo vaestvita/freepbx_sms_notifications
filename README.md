@@ -19,8 +19,8 @@ If you are using Goip SMS server
 
 if you want to send SMS from your smartphone
 
-install the app MacroDroid (https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) on your phone 
-create a macro 
+install the app MacroDroid (https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) 
+on your phone create a macro 
 
 1. use a webhook as a trigger (copy the received address to a file sms.php, $url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address)
 2. Create a local variables (memo, smsnum)
