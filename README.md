@@ -22,11 +22,8 @@ exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)
 exten => s,n,MacroExit
 
 [macro-dial-hunt-predial-hook]
-
 exten => s,1,Noop(Entering user defined context macro-dial-hunt-predial-hook in extensions_custom.conf)
-
 exten => s,n,Set(CHANNEL(hangup_handler_push)=send_sms,s,1)
-
 exten => s,n,MacroExit
 
 [send_sms]
