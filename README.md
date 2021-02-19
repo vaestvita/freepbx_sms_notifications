@@ -37,8 +37,8 @@ create a macro
 1. use a webhook as a trigger (copy the received address to a file sms.php, $url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address)
 2. Create a local variables (smsbody, smsto, smstype)
 3. create actions "Messaging - Send SMS" 
-4. in the field "phone number" insert local variable "smsto" ([v=smsto]
-5. in the field "Message text" insert local variable "smsbody" ([v=smsbody])
+4. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
+5. in the field "Message text" insert local variable "Memo" ([v=memo])
 6. save and enable your macro
 
 
