@@ -43,4 +43,4 @@ create a macro
 
 
 If you are using Goip SMS server
-1. disable this parameter  "Save message before sending (browser should support javascript)" (http://goip-sms-server.com/en/sys.php)
+1. disable this parameter in "System Manage":  "Save message before sending (browser should support javascript)" (http://goip-sms-server.com/en/sys.php)
