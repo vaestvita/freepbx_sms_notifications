@@ -34,11 +34,9 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 			if (($data[2] == $src) &&			//if the number is in the log
 			($data[1] >= $stepdate) &&			// and the SMS was sent later with a shift
 			($data[4] == "card")) {			// a business card was sent
-				echo "SMS has been sent\n";
 				$srcnum=0;
 				break;					// then the log reading ends
 			} else {					// if the number is not found in the log
-//				echo "SMS not sent";
 				$srcnum = $src;			// then remember it
 			}	
 			$row++;
@@ -53,7 +51,6 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// fix line breaks
 			if($num == $ext) {		//if extension number found
 				$surl = $url . "&smsnum=%2B" . $srcnum . "&Memo=" . $ustr;
-				echo $surl . "\n";
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $surl);
 				curl_setopt($ch, CURLOPT_HEADER, false);
@@ -62,16 +59,12 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				$result = curl_exec($ch);
 				curl_close($ch);
-				echo $result;
 				$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";card;\n";
 				file_put_contents($log, $logmessage, FILE_APPEND);    
 				break;
 			}
 		}
 	}
-}
-else	{
-	echo "not mobile";
 }
 
 //second scenario - sending SMS notification to the operator
@@ -84,11 +77,9 @@ if ($dialstatus != "ANSWER"){
 			if (($data[2] == $src) &&			//if the number is in the log
 			($data[1] >= $stepdate) &&			// and the SMS was sent later with a shift
 			($data[4] == "notify")) {				// notification was sent
-				echo "SMS has been sent\n";
 				$srcnum=0;
 				break;					// then the log reading ends
 			} else {					// if the number is not found in the log
-//				echo "SMS not sent";
 				$srcnum = $src;			// then remember it
 			}	
 			$row++;
@@ -103,7 +94,6 @@ if ($dialstatus != "ANSWER"){
 			$ustr = str_replace('%5Cn','%0D%0A',$ustr);	// fix line breaks
 			if($num == $ext) {		//if the number is in the log
 				$surl = $url . "&smsnum=%2B" . $dstchannel[1] . "&Memo=" . $ustr . "%20%2B" . $src;
-				echo $surl . "\n";
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $surl);
 				curl_setopt($ch, CURLOPT_HEADER, false);
@@ -112,7 +102,6 @@ if ($dialstatus != "ANSWER"){
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				$result = curl_exec($ch);
 				curl_close($ch);
-				echo $result;
 				$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";notify;\n";
 				file_put_contents($log, $logmessage, FILE_APPEND);    
 				break;
@@ -132,7 +121,6 @@ if ($dialstatus == "ANSWER"){
 		$ustr = str_replace('%5Cn','%0D%0A',$ustr);
 		if($num == $ext) {
 			$surl = $url . "&smsnum=%2B" . $dstchannel[1] . "&Memo=" . $ustr . "%20%2B" . $src;
-			echo $surl . "\n";
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $surl);
 			curl_setopt($ch, CURLOPT_HEADER, false);
