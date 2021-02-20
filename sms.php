@@ -24,7 +24,6 @@ $fcurdate = date("Y-m-d H:i:s", $curdate);	//formatting the current time
 $fstepdate = date("Y-m-d H:i:s", $stepdate);	//formatting time with shift
 
 preg_match('~\/(.*?)@~', $dstchannel, $dstchannel);	// select the operator's mobile number
-echo $dialstatus . "\t" . $dstchannel[1] . "\n";
 
 //first scenario - send an SMS business card to the client's mobile number after the call
 if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
