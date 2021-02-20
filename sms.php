@@ -2,7 +2,6 @@
 
 <?php
 
-require_once('nokogiri.php');
 require('/var/lib/asterisk/agi-bin/phpagi.php'); 
 $agi = new AGI();
 
@@ -35,8 +34,7 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// read the log file line by line
 			if (($data[2] == $src) &&			//if the number is in the log
 			($data[1] >= $stepdate) &&			// and the SMS was sent later with a shift
-			($data[4] == "card") &&				// a business card was sent
-			($data[5] == "")) { 	// and the dispatch was successful
+			($data[4] == "card")) {			// a business card was sent
 				echo "SMS has been sent\n";
 				$srcnum=0;
 				break;					// then the log reading ends
@@ -63,18 +61,8 @@ if(preg_match('/^79[0-9]{9}/',$src))	{	//check that the number is mobile
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-				$result=0;
-				$result = curl_exec($ch);
-//				var_dump($result);
-				if($result) {
-					$html = new nokogiri($result);
-					$answer = $html->get('td[colspan="3"]')->toArray();
-					$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";card;" . trim($answer[0]["#text"][0]) . ";\n";
-					file_put_contents($log, $logmessage, FILE_APPEND);
-				} else {
-					$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";card;;\n";
-					file_put_contents($log, $logmessage, FILE_APPEND);    
-				}
+				$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";card;\n";
+				file_put_contents($log, $logmessage, FILE_APPEND);    
 				break;
 			}
 		}
@@ -93,8 +81,7 @@ if ($dialstatus != "ANSWER"){
 		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {	// read the log file line by line
 			if (($data[2] == $src) &&			//if the number is in the log
 			($data[1] >= $stepdate) &&			// and the SMS was sent later with a shift
-			($data[4] == "notify") &&				// notification was sent
-			($data[5] == "")) { 	// and the dispatch was successful
+			($data[4] == "notify")) {				// notification was sent
 				echo "SMS has been sent\n";
 				$srcnum=0;
 				break;					// then the log reading ends
@@ -121,17 +108,8 @@ if ($dialstatus != "ANSWER"){
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-				$result=0;
-				$result = curl_exec($ch);
-				if($result) {
-					$html = new nokogiri($result);
-					$answer = $html->get('td[colspan="3"]')->toArray();
-					$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";notify;" . trim($answer[0]["#text"][0]) . ";\n";
-					file_put_contents($log, $logmessage, FILE_APPEND);
-				} else {
-					$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";notify;;\n";
-					file_put_contents($log, $logmessage, FILE_APPEND);    
-				}
+				$logmessage = $fcurdate . ";" . $curdate . ";" . $srcnum . ";" . $num . ";notify;\n";
+				file_put_contents($log, $logmessage, FILE_APPEND);    
 				break;
 			}
 		}
