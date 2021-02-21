@@ -16,6 +16,7 @@ Installation and configuration
 3. chown asterisk:asterisk -R /sms
 4. add code to the end of the file extensions_custom.conf 
 5. Submit, Apply Config
+6. Enter the address of your SMS gateway in the url field ($url = '')
 
 SMS notifications after the call will be sent according to the matching scenario if there is SMS text in the corresponding file (card.txt, notify.txt, answered.txt)
 
@@ -24,7 +25,9 @@ SMS notifications after the call will be sent according to the matching scenario
 2. if you want to send an SMS notification to an operator with extension number 100 to his mobile (which is specified in the follow me module) about a missed call, create an entry in the file notify.txt similar to: "100;Missed call"
 3. If you want to send an SMS notification with the client's number to the operator who received the call on his mobile phone, create a corresponding entry in the file answered.txt: "100;Now call"
 
-If you are using Goip SMS server
+# SMS gateway setting
+
+## If you are using Goip SMS server
 1. disable this parameter in "System Manage":  "Save message before sending (browser should support javascript)" (http://goip-sms-server.com/en/sys.php)
 
 if you want to send SMS from your smartphone
@@ -38,4 +41,3 @@ on your phone create a macro
 4. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
 5. in the field "Message text" insert local variable "Memo" ([v=memo])
 6. save and enable your macro
-
