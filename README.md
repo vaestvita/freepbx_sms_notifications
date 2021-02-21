@@ -41,3 +41,5 @@ SMS notifications after the call will be sent according to the matching scenario
 7. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
 8. in the field "Message text" insert local variable "Memo" ([v=memo])
 9. save and enable your macro
+
+If you know how to improve this script - make a request, I will be glad for your help.
