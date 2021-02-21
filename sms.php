@@ -133,5 +133,3 @@ if ($dialstatus == "ANSWER"){
 		}
 	}
 }
-
-?>
