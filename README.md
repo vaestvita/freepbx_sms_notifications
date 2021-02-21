@@ -28,16 +28,16 @@ SMS notifications after the call will be sent according to the matching scenario
 # SMS gateway setting
 
 ## If you are using Goip SMS server
-1. disable this parameter in "System Manage":  "Save message before sending (browser should support javascript)" (http://goip-sms-server.com/en/sys.php)
+1. disable this parameter in "System Manage":  "Save message before sending (browser should support javascript)" (/goip/en/sys.php)
 
-if you want to send SMS from your smartphone
+## if you want to send SMS from your Android smartphone
 
-install the app MacroDroid (https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) 
-on your phone create a macro 
-
-1. use a webhook as a trigger (copy the received address to a file sms.php, $url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address)
-2. Create a local variables (memo, smsnum)
-3. create actions "Messaging - Send SMS" 
-4. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
-5. in the field "Message text" insert local variable "Memo" ([v=memo])
-6. save and enable your macro
+1. Install the app MacroDroid (https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) 
+2. Create a new macro 
+3. Use a webhook as a trigger 
+4. Copy the received address to a file sms.php, $url = 'https://trigger.macrodroid.com/xxxxxxxxx-xxxxxxx-xxxxxx/smsgate'; //sms gateway address)
+5. Create a local variables (memo, smsnum)
+6. create actions "Messaging - Send SMS" 
+7. in the field "phone number" insert local variable "smsnum" ([v=smsnum]
+8. in the field "Message text" insert local variable "Memo" ([v=memo])
+9. save and enable your macro
